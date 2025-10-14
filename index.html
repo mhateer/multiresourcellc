@@ -1,0 +1,416 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>MultiResource LLC — Import • Export • E‑commerce</title>
+    <meta name="description" content="MultiResource LLC is a USA-based company operating in USA, Dubai, and Pakistan. Import, export, and e‑commerce trade across multiple industries." />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- React (CDN) -->
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <style>
+      :root {
+        --brand: #0ea5e9;         /* sky-500 */
+        --brand-600: #0284c7;      /* sky-600 */
+        --brand-700: #0369a1;      /* sky-700 */
+        --ink: #0b1220;            /* dark slate */
+        --muted: #64748b;          /* slate-500 */
+        --bg: #0a0f1a;             /* deep navy */
+        --card: #0f172a;           /* slate-900 */
+        --ring: rgba(14,165,233,.35);
+        --nav-h: 72px;
+        --radius: 16px;
+        --shadow: 0 10px 30px rgba(2,132,199,.25);
+      }
+      * { box-sizing: border-box; }
+      html { scroll-behavior: smooth; }
+      body {
+        margin: 0;
+        font-family: 'Inter', system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
+        color: #e5eef7;
+        background: radial-gradient(1200px 600px at 10% -10%, rgba(14,165,233,.15), transparent 60%),
+                    radial-gradient(900px 500px at 90% 10%, rgba(14,165,233,.08), transparent 60%),
+                    linear-gradient(180deg, #070b13, #0b1220 40%, #0a0f1a);
+      }
+      a { color: inherit; text-decoration: none; }
+      .container { max-width: 1200px; margin: 0 auto; padding: 0 20px; padding-top: 15px; }
+      .btn {
+        display: inline-flex; align-items: center; gap: 8px;
+        padding: 12px 16px; border-radius: 9999px; border: 1px solid rgba(255,255,255,.12);
+        background: linear-gradient(180deg, rgba(14,165,233,.2), rgba(14,165,233,.08));
+        color: white; font-weight: 600; letter-spacing: .2px;
+        box-shadow: var(--shadow);
+      }
+      .btn:hover { filter: brightness(1.08); transform: translateY(-1px); transition: .2s ease; }
+      .btn.ghost { background: rgba(255,255,255,.04); border-color: rgba(255,255,255,.12); box-shadow: none; }
+      .badge { display:inline-block; padding:6px 10px; border-radius:999px; font-size:12px; color:#cbe7f8; background:rgba(14,165,233,.15); border:1px solid rgba(14,165,233,.35) }
+      /* Header */
+      header {
+        position: sticky; top: 0; z-index: 50;
+        backdrop-filter: saturate(140%) blur(10px);
+        background: rgba(7, 11, 19, 0.65);
+        border-bottom: 1px solid rgba(255,255,255,.06);
+        height: var(--nav-h);
+      }
+      .brand { display:flex; align-items:center; gap:12px; font-weight:800; letter-spacing:.3px; }
+      .logo {
+        width: 36px; height:36px; border-radius:10px;
+        background: conic-gradient(from 180deg at 50% 50%, #22d3ee, #0ea5e9, #6366f1, #22d3ee);
+        box-shadow: 0 6px 18px rgba(14,165,233,.35), inset 0 0 0 2px rgba(255,255,255,.15);
+      }
+      nav { display:flex; align-items:center; justify-content:space-between; height:100%; }
+      .links { display:flex; gap: 18px; align-items:center; }
+      .links a { padding:10px 12px; border-radius:10px; color:#d1e7f9; font-weight:600; font-size:14px; opacity:.9 }
+      .links a.active, .links a:hover { background: rgba(14,165,233,.12); color: white; border:1px solid rgba(14,165,233,.35) }
+      .hamburger { display:none; background:none; border:none; color:white; font-size:22px; }
+      @media (max-width: 900px){ .links { display:none } .hamburger { display:block } }
+      .mobileMenu { display:none; position:absolute; left:0; right:0; top:var(--nav-h); background:rgba(7, 11, 19, 0.95); border-bottom:1px solid rgba(255,255,255,.06) }
+      .mobileMenu a { display:block; padding:16px 24px; border-top:1px solid rgba(255,255,255,.06); color:#cfe8fb; }
+      .mobileMenu a:hover { background: rgba(14,165,233,.1) }
+
+      /* Hero */
+      .hero { padding: 96px 0 72px; position:relative; overflow:hidden; }
+      .hero h1 { font-size: clamp(32px, 4.6vw, 56px); line-height: 1.05; margin: 12px 0 12px; }
+      .hero p { font-size: clamp(16px, 2.2vw, 20px); color:#cfe3f5; max-width: 800px; }
+      .hero .cta { display:flex; gap:12px; flex-wrap:wrap; margin-top:24px }
+      .hero .globe { position:absolute; right:-120px; top:-120px; width: 520px; height: 520px; opacity:.15; pointer-events:none; filter: drop-shadow(0 30px 80px rgba(2,132,199,.35)); }
+      @media (max-width: 900px){ .hero { padding-top: 72px } .hero .globe { right:-140px; top:-160px; width: 480px; height:480px } }
+
+      /* Sections */
+      section { scroll-margin-top: calc(var(--nav-h) + 24px); padding: 72px 0; border-top:1px solid rgba(255,255,255,.06) }
+      h2 { font-size: clamp(26px, 3.2vw, 36px); margin: 0 0 16px }
+      .lead { color:#cfe3f5; max-width: 850px }
+
+      /* Cards / Grids */
+      .grid { display:grid; gap: 18px }
+      .grid.cols-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+      .grid.cols-4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+      @media (max-width: 1000px){ .grid.cols-3, .grid.cols-4 { grid-template-columns: repeat(2, minmax(0, 1fr)) } }
+      @media (max-width: 640px){ .grid.cols-3, .grid.cols-4 { grid-template-columns: 1fr } }
+
+      .card { background: linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.02)); border:1px solid rgba(255,255,255,.08);
+              border-radius: var(--radius); padding: 20px; box-shadow: 0 10px 24px rgba(2,132,199,.15) }
+      .card h3 { margin: 8px 0 6px; font-size: 18px }
+      .card p { color:#cfe3f5; margin:0 }
+      .icon { width: 44px; height:44px; border-radius:12px; display:grid; place-items:center; background: rgba(14,165,233,.18); border:1px solid rgba(14,165,233,.35); box-shadow: inset 0 0 20px rgba(14,165,233,.15) }
+      ul.clean { list-style:none; padding:0; margin:10px 0 0 }
+      ul.clean li { padding:6px 0; color:#cfe3f5 }
+      ul.check li::before { content:'✔'; color:#22c55e; margin-right:8px }
+
+      /* Contact */
+      .contact { display:grid; grid-template-columns: 1.2fr .8fr; gap: 24px }
+      @media (max-width: 900px){ .contact { grid-template-columns: 1fr } }
+      label { display:block; font-size: 14px; margin: 10px 0 8px; color:#d7e9fb }
+      input, textarea { width:100%; padding:12px 14px; border-radius:12px; background:#0b1424; border:1px solid rgba(255,255,255,.12); color:white }
+      input:focus, textarea:focus { outline: none; box-shadow: 0 0 0 4px var(--ring); border-color: rgba(14,165,233,.55) }
+
+      footer { border-top:1px solid rgba(255,255,255,.08); padding: 36px 0; color:#bfd9ed }
+      .pill { display:inline-flex; gap:8px; align-items:center; padding:6px 10px; border-radius:999px; border:1px solid rgba(255,255,255,.12); background:rgba(255,255,255,.04) }
+      .floating-top { position: fixed; right: 18px; bottom: 18px; width: 44px; height:44px; border-radius: 50%; display:grid; place-items:center; background: rgba(14,165,233,.9); color:#031525; font-weight:900; box-shadow: var(--shadow); cursor:pointer }
+    </style>
+  </head>
+  <body>
+    <header>
+      <div class="container">
+        <nav>
+          <div class="brand"><span class="logo" aria-hidden="true"></span> <span>MultiResource LLC</span></div>
+          <div class="links" id="desktopLinks">
+            <a href="#home" data-nav>Home</a>
+            <a href="#about" data-nav>About</a>
+            <a href="#categories" data-nav>Categories</a>
+            <a href="#services" data-nav>Services</a>
+            <a href="#why" data-nav>Why Us</a>
+            <a href="#contact" data-nav>Contact</a>
+          </div>
+          <button class="hamburger" id="hamburger" aria-label="Menu">☰</button>
+        </nav>
+        <div class="mobileMenu" id="mobileMenu">
+          <a href="#home">Home</a>
+          <a href="#about">About</a>
+          <a href="#categories">Categories</a>
+          <a href="#services">Services</a>
+          <a href="#why">Why Us</a>
+          <a href="#contact">Contact</a>
+        </div>
+      </div>
+    </header>
+
+    <main id="root"></main>
+
+    <a class="floating-top" href="#home" title="Back to top">↑</a>
+
+    <script type="text/babel">
+      const { useEffect, useRef, useState } = React;
+
+      const Globe = () => (
+        <svg className="globe" viewBox="0 0 600 600" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <defs>
+            <radialGradient id="g" cx="50%" cy="50%" r="50%">
+              <stop offset="0%" stopColor="#0ea5e9" stopOpacity=".9"/>
+              <stop offset="100%" stopColor="#0ea5e9" stopOpacity="0"/>
+            </radialGradient>
+          </defs>
+          <circle cx="300" cy="300" r="220" fill="url(#g)" />
+          {[...Array(8)].map((_,i)=> (
+            <circle key={i} cx="300" cy="300" r={60 + i*20} stroke="#6bd3ff" strokeOpacity=".25" strokeWidth="1" fill="none"/>
+          ))}
+          {[...Array(12)].map((_,i)=> (
+            <line key={'l'+i} x1="300" y1="80" x2="300" y2="520" stroke="#6bd3ff" strokeOpacity=".15" transform={`rotate(${i*15} 300 300)`}/>
+          ))}
+        </svg>
+      );
+
+      const Section = ({ id, eyebrow, title, lead, children }) => (
+        <section id={id} className="section">
+          <div className="container">
+            {eyebrow && <span className="badge">{eyebrow}</span>}
+            {title && <h2>{title}</h2>}
+            {lead && <p className="lead">{lead}</p>}
+            {children}
+          </div>
+        </section>
+      );
+
+      const Card = ({ icon, title, children }) => (
+        <div className="card">
+          <div className="icon">{icon}</div>
+          <h3>{title}</h3>
+          <div>{children}</div>
+        </div>
+      );
+
+      const useActiveSection = () => {
+        const [active, setActive] = useState('home');
+        useEffect(() => {
+          const ids = ['home','about','categories','services','why','contact'];
+          const obs = new IntersectionObserver((entries)=>{
+            entries.forEach(e => { if(e.isIntersecting) setActive(e.target.id); });
+          }, { rootMargin: `-55% 0px -40% 0px` });
+          ids.forEach(id => { const el = document.getElementById(id); if(el) obs.observe(el); });
+          return () => obs.disconnect();
+        }, []);
+        return active;
+      };
+
+      function App(){
+        const active = useActiveSection();
+
+        useEffect(()=>{
+          // Toggle active nav item
+          document.querySelectorAll('[data-nav]').forEach(a => {
+            a.classList.toggle('active', a.getAttribute('href') === '#' + active);
+          });
+        }, [active]);
+
+        useEffect(()=>{
+          const btn = document.getElementById('hamburger');
+          const menu = document.getElementById('mobileMenu');
+          const toggle = () => { menu.style.display = menu.style.display === 'block' ? 'none' : 'block'; };
+          const close = () => { menu.style.display = 'none'; };
+          btn.addEventListener('click', toggle);
+          menu.querySelectorAll('a').forEach(a => a.addEventListener('click', close));
+          return () => { btn.removeEventListener('click', toggle); menu.querySelectorAll('a').forEach(a => a.removeEventListener('click', close)); };
+        }, []);
+
+        return (
+          <>
+            {/* HERO */}
+            <section id="home" className="hero">
+              <Globe />
+              <div className="container">
+                <span className="badge">USA · Dubai · Pakistan</span>
+                <h1>Import · Export · E‑commerce — under one trusted partner</h1>
+                <p>
+                  MultiResource LLC is a USA-based company with a global presence. We specialize in import, export, and
+                  e‑commerce trade, connecting businesses with reliable resources and high‑quality products across
+                  multiple industries.
+                </p>
+                <div className="cta">
+                  <a className="btn" href="#categories">Explore Categories →</a>
+                  <a className="btn ghost" href="#contact">Contact Us</a>
+                </div>
+                <div style={{marginTop:24, display:'flex', gap:10, flexWrap:'wrap'}}>
+                  <span className="pill">Trusted global network</span>
+                  <span className="pill">Multi‑industry catalog</span>
+                  <span className="pill">Quality • Reliability • Delivery</span>
+                </div>
+              </div>
+            </section>
+
+            {/* ABOUT */}
+            <Section id="about" eyebrow="About Us" title="We operate across borders to move products at speed and scale" lead={
+              `Operating in USA, Dubai, and Pakistan, we connect suppliers and buyers through dependable trade flows. From bulk commodities to consumer goods, our team manages sourcing, compliance, logistics, and last‑mile delivery.`
+            }>
+              <div className="grid cols-3" style={{marginTop:18}}>
+                <Card icon="🌾" title="Agile sourcing">
+                  <p>Rapid vendor qualification and price discovery across continents.</p>
+                </Card>
+                <Card icon="🛰️" title="Global logistics">
+                  <p>Land, sea, and air freight orchestration with real‑time status.</p>
+                </Card>
+                <Card icon="🛡️" title="Risk & quality">
+                  <p>Contracts, inspections, and documentation handled to spec.</p>
+                </Card>
+              </div>
+            </Section>
+
+            {/* CATEGORIES */}
+            <Section id="categories" eyebrow="Our Business Categories" title="Multi‑category product coverage" lead={
+              `We deal in a wide range of products with options to display pictures, details, sizes, colors, quantity, and sale offers for e‑commerce.`
+            }>
+              <div className="grid cols-4" style={{marginTop:18}}>
+                <Card icon="🌾" title="Agro Commodities">
+                  <ul className="clean">
+                    <li>Grains & pulses</li>
+                    <li>Seeds & spices</li>
+                    <li>Edible essentials</li>
+                  </ul>
+                </Card>
+                <Card icon="⛏️" title="Industrial Raw Materials & Minerals">
+                  <ul className="clean">
+                    <li>Metals & ores</li>
+                    <li>Essential raw materials</li>
+                    <li>Bulk procurement</li>
+                  </ul>
+                </Card>
+                <Card icon="♻️" title="Reuse Products (Electrical, Electronics & Scraps)">
+                  <ul className="clean">
+                    <li>Refurbished goods</li>
+                    <li>Recyclables & scrap</li>
+                    <li>Eco‑friendly sourcing</li>
+                  </ul>
+                </Card>
+                <Card icon="🏗️" title="Stock Lots & Construction Materials">
+                  <ul className="clean">
+                    <li>Bulk lots & surplus</li>
+                    <li>Building supplies</li>
+                    <li>Project fulfillment</li>
+                  </ul>
+                </Card>
+              </div>
+
+              <div className="card" style={{marginTop:18}}>
+                <div className="icon">🛒</div>
+                <h3 style={{marginTop:8}}>E‑commerce Products</h3>
+                <p>Consumer goods with configurable options for size, color, quantity, and promotional sale offers.</p>
+                <div className="grid cols-4" style={{marginTop:12}}>
+                  {['Apparel','Accessories','Home & Kitchen','Gadgets'].map((t,i)=> (
+                    <div className="card" key={i}>
+                      <div className="icon">🛍️</div>
+                      <h3>{t}</h3>
+                      <p style={{marginTop:6}}>Example product variants • Size • Color • Qty</p>
+                      <div style={{display:'flex', gap:8, marginTop:10, flexWrap:'wrap'}}>
+                        <span className="badge">S</span>
+                        <span className="badge">M</span>
+                        <span className="badge">L</span>
+                        <span className="badge">Black</span>
+                        <span className="badge">Blue</span>
+                        <span className="badge">Sale −20%</span>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </Section>
+
+            {/* SERVICES */}
+            <Section id="services" eyebrow="Import & Export Services" title="End‑to‑end trade execution">
+              <div className="grid cols-3" style={{marginTop:18}}>
+                <Card icon="📦" title="Agro Commodities">
+                  <p>Import & export management for grains, pulses, seeds, spices, and more.</p>
+                </Card>
+                <Card icon="🏭" title="Industrial Materials & Minerals">
+                  <p>From sourcing to shipment for metals, ores, and essential raw materials.</p>
+                </Card>
+                <Card icon="🔌" title="Electronics & Scrap Trading">
+                  <p>Refurbished devices, recyclable streams, and scrap procurement.</p>
+                </Card>
+                <Card icon="🚧" title="Construction Materials">
+                  <p>Stock lots, bulk orders, and site‑ready supply chain.</p>
+                </Card>
+                <Card icon="🛒" title="E‑commerce Distribution">
+                  <p>Warehousing, pick‑pack‑ship, and market placement for consumer products.</p>
+                </Card>
+                <Card icon="🧾" title="Compliance & Documentation">
+                  <p>Contracts, LC, customs clearance, and certificates handled accurately.</p>
+                </Card>
+              </div>
+            </Section>
+
+            {/* WHY US */}
+            <Section id="why" eyebrow="Why Choose Us?" title="A single partner, multiple categories — with global reach">
+              <div className="grid cols-3" style={{marginTop:18}}>
+                <div className="card"><h3>Trusted global network</h3><ul className="clean check"><li>Operating in USA, Dubai, Pakistan</li><li>Reliable suppliers & verified buyers</li></ul></div>
+                <div className="card"><h3>Everything under one roof</h3><ul className="clean check"><li>Agro to industrial & construction</li><li>E‑commerce catalog management</li></ul></div>
+                <div className="card"><h3>Quality & on‑time delivery</h3><ul className="clean check"><li>Transparent QC and documentation</li><li>Logistics optimized for lead time</li></ul></div>
+              </div>
+            </Section>
+
+            {/* CONTACT */}
+            <Section id="contact" eyebrow="Contact" title="Let’s work together" lead={`Tell us what you need — we’ll share pricing, timelines, and options.`}>
+              <div className="contact" style={{marginTop:18}}>
+                <div className="card">
+                  <form onSubmit={(e)=>{ e.preventDefault(); const f = e.currentTarget; const params = new URLSearchParams({
+                    name: f.name.value, email: f.email.value, subject: f.subject.value, message: f.message.value
+                  }); window.location.href = `mailto:info@multiresource.example?subject=${encodeURIComponent('New Inquiry — '+f.subject.value)}&body=${encodeURIComponent('Name: '+f.name.value+'%0AEmail: '+f.email.value+'%0A%0A'+f.message.value)}`; }}>
+                    <div style={{display:'grid', gridTemplateColumns:'1fr 1fr', gap:12}}>
+                      <div>
+                        <label htmlFor="name">Name</label>
+                        <input id="name" name="name" required placeholder="Jane Doe" />
+                      </div>
+                      <div>
+                        <label htmlFor="email">Email</label>
+                        <input id="email" name="email" type="email" required placeholder="you@example.com" />
+                      </div>
+                    </div>
+                    <label htmlFor="subject">Subject</label>
+                    <input id="subject" name="subject" placeholder="Request for quote / product inquiry" />
+                    <label htmlFor="message">Message</label>
+                    <textarea id="message" name="message" rows="5" placeholder="Share your requirements, quantities, specs, and destination port…"></textarea>
+                    <div style={{display:'flex', gap:10, alignItems:'center', marginTop:14}}>
+                      <button className="btn" type="submit">Send Inquiry</button>
+                      <span className="muted">or email <a href="mailto:info@multiresource.example">info@multiresource.example</a></span>
+                    </div>
+                  </form>
+                </div>
+                <div className="card">
+                  <h3>Company</h3>
+                  <p style={{margin:'8px 0 14px'}}>MultiResource LLC — Import • Export • E‑commerce</p>
+                  <ul className="clean">
+                    <li>📍 <strong>USA</strong> • Dubai • Pakistan</li>
+                    <li>📞 +1 (206) 802‑5306</li>
+                    <li>✉️ info@multiresource.example</li>
+                  </ul>
+                  <div style={{height:12}}></div>
+                  <h3>Hours</h3>
+                  <ul className="clean"><li>Mon–Fri · 9:00–18:00 (local)</li></ul>
+                  <div style={{height:12}}></div>
+                  <h3>Follow</h3>
+                  <div style={{display:'flex', gap:8, flexWrap:'wrap'}}>
+                    <a className="btn ghost" href="#" aria-label="LinkedIn">LinkedIn</a>
+                    <a className="btn ghost" href="#" aria-label="Facebook">Facebook</a>
+                    <a className="btn ghost" href="#" aria-label="Instagram">Instagram</a>
+                  </div>
+                </div>
+              </div>
+            </Section>
+
+            <footer>
+              <div className="container" style={{display:'flex', alignItems:'center', justifyContent:'space-between', gap:12, flexWrap:'wrap'}}>
+                <div>© {new Date().getFullYear()} MultiResource LLC. All rights reserved.</div>
+                <div style={{opacity:.9}}>Import • Export • E‑commerce</div>
+              </div>
+            </footer>
+          </>
+        );
+      }
+
+      const root = ReactDOM.createRoot(document.getElementById('root'));
+      root.render(<App/>);
+    </script>
+  </body>
+</html>
